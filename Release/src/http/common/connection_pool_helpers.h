@@ -13,6 +13,10 @@ namespace client
 {
 namespace details
 {
+
+extern std::atomic<bool> g_pooling_enabled;
+void set_pooling_enabled(bool);
+
 template<class ConnectionIsh>
 class connection_pool_stack
 {
@@ -40,7 +44,7 @@ public:
     }
 
     // releases `released` back to the connection pool
-    void release(std::shared_ptr<ConnectionIsh>&& released) { m_connections.push_back(std::move(released)); }
+    void release(std::shared_ptr<ConnectionIsh>&& released) { if (g_pooling_enabled) m_connections.push_back(std::move(released)); }
 
     bool free_stale_connections() CPPREST_NOEXCEPT
     {

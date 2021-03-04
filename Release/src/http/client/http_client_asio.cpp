@@ -111,6 +111,13 @@ std::string calc_cn_host(const web::http::uri& baseUri, const web::http::http_he
 }
 } // namespace
 
+std::atomic<bool> web::http::client::details::g_pooling_enabled{true};
+
+void web::http::client::details::set_pooling_enabled(bool pooling_enabled)
+{
+    g_pooling_enabled = pooling_enabled;
+}
+
 namespace web
 {
 namespace http
